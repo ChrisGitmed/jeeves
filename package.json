@@ -5,6 +5,7 @@
   "repository": "https://github.com/ChrisGitmed/slack-bot.git",
   "license": "MIT",
   "dependencies": {
+    "@slack/bolt": "^3.12.1",
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
