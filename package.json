@@ -1,0 +1,16 @@
+{
+  "name": "slack-bot",
+  "version": "1.0.0",
+  "main": "dist/app/app.js",
+  "repository": "https://github.com/ChrisGitmed/slack-bot.git",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon dist/app/app.js",
+    "run": "node dist/app/app.js"
+  }
+}
