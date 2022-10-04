@@ -12,5 +12,6 @@
     "build": "tsc",
     "dev": "nodemon dist/app/app.js",
     "run": "node dist/app/app.js"
-  }
+  },
+  "type": "module"
 }
