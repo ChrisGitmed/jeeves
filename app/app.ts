@@ -1,20 +1,30 @@
 import Bolt from '@slack/bolt';
 import { config } from '../config/index.js';
+const {
+  port,
+  slack: {
+    botToken,
+    signingSecret,
+    appToken,
+    botId,
+  }
+} = config
+const goodMorningRegex = new RegExp(`((G|g)ood morning ${botId})|(${botId} (G|g)ood morning)`);
 
 const app = new Bolt.App({
-  token: config.slack.botToken,
-  signingSecret: config.slack.signingSecret,
+  token: botToken,
+  signingSecret: signingSecret,
   socketMode: true,
-  appToken: config.slack.appToken,
-  port: config.port || 8080,
+  appToken: appToken,
+  port: port || 8080,
 });
 
-// Listens to incoming messages that contain "hello"
-app.message('hello', async ({ message, say }) => {
-  console.log('received?');
-  // say() sends a message to the channel where the event was triggered
-  await say(`Hey there <@${message.user}>!`);
+// Listens to incoming messages that contain 'Good/good morning @Jeeves'
+app.message(goodMorningRegex, async({ message, say }) => {
+  console.log('message: ', message);
+  await say(`Good morning <@${message.user}>, you rang?`);
 });
+
 
 (async () => {
   await app.start()
