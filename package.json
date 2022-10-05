@@ -15,8 +15,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon dist/app/app.js",
-    "run": "node dist/app/app.js"
+    "dev": "nodemon --watch '*/**.ts' -e ts --exec tsc",
+    "start": "node dist/app/app.js"
   },
   "type": "module"
 }
