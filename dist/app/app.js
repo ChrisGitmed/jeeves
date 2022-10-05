@@ -9,23 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import Bolt from '@slack/bolt';
 import { config } from '../config/index.js';
-import { goodMorningRegex, introduceYourselfRegex, } from './regex.js';
-const { port, slack: { botToken, signingSecret, appToken, } } = config;
+import { goodMorningRegex, hiRegex, introduceYourselfRegex, } from './regex.js';
 const app = new Bolt.App({
-    token: botToken,
-    signingSecret: signingSecret,
+    token: config.slack.botToken,
+    signingSecret: config.slack.signingSecret,
     socketMode: true,
-    appToken: appToken,
-    port,
+    appToken: config.slack.appToken,
+    port: config.port,
 });
 // Listens for incoming messages that contain 'Good morning'
 app.message(goodMorningRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('message: ', message);
     yield say(`Good morning <@${message.user}>, you rang?`);
+}));
+// Listens for incoming messages that contain 'Good morning'
+app.message(hiRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
+    yield say(`Hi <@${message.user}>!`);
 }));
 // Listens for incoming messages that contain 'Introduce yourself'
 app.message(introduceYourselfRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('message: ', message);
     yield say(`Hello <!here>, my name is Jeeves and I'll be your digital assistant. Beep Boop.`);
 }));
 (() => __awaiter(void 0, void 0, void 0, function* () {
