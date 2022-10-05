@@ -19,7 +19,7 @@ app.message(goodMorningRegex, async({ message, say }) => {
   await say(`Good morning <@${message.user}>, you rang?`);
 });
 
-// Listens for incoming messages that contain 'Good morning'
+// Listens for incoming messages that contain 'Hi', 'Hey', or 'Hello'
 app.message(hiRegex, async({ message, say }) => {
   await say(`Hi <@${message.user}>!`);
 });
