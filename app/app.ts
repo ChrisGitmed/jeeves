@@ -1,30 +1,17 @@
-import Bolt, { MessageChangedEvent, SayArguments } from '@slack/bolt';
+import { App } from '@slack/bolt';
 import { config } from '../config/index.js';
 import {
   goodMorningRegex,
   introduceYourselfRegex,
 } from './regex.js';
 
-const {
-  port,
-  slack: {
-    botToken,
-    signingSecret,
-    appToken,
-  }
-} = config;
-
-const app = new Bolt.App({
-  token: botToken,
-  signingSecret: signingSecret,
+const app = new App({
+  token: config.slack.botToken,
+  signingSecret: config.slack.signingSecret,
   socketMode: true,
-  appToken: appToken,
-  port,
+  appToken: config.slack.appToken,
+  port: config.port,
 });
-
-interface Message {
-  user: string,
-}
 
 // Listens for incoming messages that contain 'Good morning'
 app.message(goodMorningRegex, async({ message, say }) => {
