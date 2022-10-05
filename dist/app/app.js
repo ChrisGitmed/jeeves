@@ -21,9 +21,19 @@ const app = new Bolt.App({
 app.message(goodMorningRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
     yield say(`Good morning <@${message.user}>, you rang?`);
 }));
-// Listens for incoming messages that contain 'Good morning'
+// Listens for incoming messages that contain 'Hi', 'Hey', or 'Hello'
 app.message(hiRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
-    yield say(`Hi <@${message.user}>!`);
+    var _a, _b, _c, _d, _e, _f;
+    const split = message.text.split(' ');
+    const target = split.indexOf(config.slack.botId);
+    let response = '';
+    if (((_a = split[target - 1]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) === 'hi' || ((_b = split[target + 1]) === null || _b === void 0 ? void 0 : _b.toLowerCase()) === 'hi')
+        response = 'Hi';
+    else if (((_c = split[target - 1]) === null || _c === void 0 ? void 0 : _c.toLowerCase()) === 'hey' || ((_d = split[target + 1]) === null || _d === void 0 ? void 0 : _d.toLowerCase()) === 'hey')
+        response = 'Hey';
+    else if (((_e = split[target - 1]) === null || _e === void 0 ? void 0 : _e.toLowerCase()) === 'hello' || ((_f = split[target + 1]) === null || _f === void 0 ? void 0 : _f.toLowerCase()) === 'hello')
+        response = 'Hello';
+    yield say(`${response} <@${message.user}>!`);
 }));
 // Listens for incoming messages that contain 'Introduce yourself'
 app.message(introduceYourselfRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
