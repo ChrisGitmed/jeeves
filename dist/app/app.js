@@ -9,19 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import Bolt from '@slack/bolt';
 import { config } from '../config/index.js';
-const { port, slack: { botToken, signingSecret, appToken, botId, } } = config;
-const goodMorningRegex = new RegExp(`(G|g)ood morning ${botId}`);
+import { goodMorningRegex, introduceYourselfRegex, } from './regex.js';
+const { port, slack: { botToken, signingSecret, appToken, } } = config;
 const app = new Bolt.App({
     token: botToken,
     signingSecret: signingSecret,
     socketMode: true,
     appToken: appToken,
-    port: port || 8080,
+    port,
 });
-// Listens to incoming messages that contain 'Good morning @Jeeves'
+// Listens for incoming messages that contain 'Good morning'
 app.message(goodMorningRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('message: ', message);
     yield say(`Good morning <@${message.user}>, you rang?`);
+}));
+// Listens for incoming messages that contain 'Introduce yourself'
+app.message(introduceYourselfRegex, ({ message, say }) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('message: ', message);
+    yield say(`Hello <!here>, my name is Jeeves and I'll be your digital assistant. Beep Boop.`);
 }));
 (() => __awaiter(void 0, void 0, void 0, function* () {
     yield app.start();
