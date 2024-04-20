@@ -1,8 +1,12 @@
 import Bolt from '@slack/bolt';
+// import OpenAI from 'openai';
+import { OpenAI} from 'openai'
+
 import { config } from '../config/index.js';
-import { hiRegex, introduceYourselfRegex } from './regex.js';
 
+const openai = new OpenAI({ apiKey: config.openaiKey });
 
+// Define the Application
 const app = new Bolt.App({
     port: config.port,
     token: config.slack.botToken,
@@ -10,27 +14,42 @@ const app = new Bolt.App({
     socketMode: true,
     appToken: config.slack.appToken,
 });
-// Listens for incoming messages that contain 'Hi', 'Hey', or 'Hello'
-app.message(hiRegex, async ({ message, say }) => {
-    const split = message.text.split(' ');
-    const target = split.indexOf(config.slack.botId);
-    let response = '';
-    if (split[target - 1]?.toLowerCase() === 'hi' || split[target + 1]?.toLowerCase() === 'hi')
-        response = 'Hi';
-    else if (split[target - 1]?.toLowerCase() === 'hey' || split[target + 1]?.toLowerCase() === 'hey')
-        response = 'Hey';
-    else if (split[target - 1]?.toLowerCase() === 'hello' || split[target + 1]?.toLowerCase() === 'hello')
-        response = 'Hello';
-    await say(`${response} <@${message.user}>!`);
-});
-// TODO: Listen for messages coming from Jira or BitBucket bots
+
+// TODO: Listens for incoming messages that contain 'Introduce yourself'
+
+// Listen for incoming messages
 app.message('', async ({ message, say }) => {
-    await say(`Jira update logged`);
+    console.log('message: ', message);
+
+    // TODO: Pass the message to OpenAI
+    try { 
+        const GPTOutput = await openai.completions.create({ 
+            model: "gpt-3.5-turbo", 
+            messages: [{ role: 'user', content: message }], 
+        }); 
+        const output_text = GPTOutput.data.choices[0].message.content; 
+        console.log(output_text); 
+
+    } catch (err) { 
+        if (err.response) { 
+            console.log(err.response.status); 
+            console.log(err.response.data); 
+        } else { 
+            console.log(err.message); 
+        } 
+    } 
+
+    // TODO: Pass the message to OpenAI
+    // const aiResponse = await openai.chat.completions.create({
+    //     messages: [{ role: "system", content: message }],
+    //     model: 'gpt-3.5-turbo',
+    // });
+    // console.log('aiResponse: ', aiResponse)
+
+    // TODO Return the response
+    // await say();
 });
-// Listens for incoming messages that contain 'Introduce yourself'
-app.message(introduceYourselfRegex, async ({ message, say }) => {
-    await say(`Hello <!here>, my name is Jeeves and I'll be your digital assistant. Beep Boop.`);
-});
+
 (async () => {
     await app.start();
     console.log(`Bolt app is running`);
